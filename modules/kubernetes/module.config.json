@@ -1,0 +1,6 @@
+{
+  "with_azuread": true,
+  "with_azuredevops": true,
+  "with_kubernetes": true,
+  "with_remote_states": ["core", "dns"]
+}

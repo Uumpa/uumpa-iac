@@ -1,0 +1,11 @@
+{
+  "name_prefix": "uumpatest",
+  "az_account_name": "Uumpa",
+  "location": "West Europe",
+  "terraform": {
+    "azurerm_provider_version": "3.32.0",
+    "azuread_provider_version": "2.30.0",
+    "azuredevops_provider_version": "0.3.0",
+    "kubernetes_provider_version": "2.16.0"
+  }
+}

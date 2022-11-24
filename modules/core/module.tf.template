@@ -1,0 +1,13 @@
+module "core" {
+  source = "__MODULES_PATH__/core"
+  location = local.location
+  name_prefix = local.name_prefix
+}
+
+output "name_prefix" {
+    value = module.core.name_prefix
+}
+
+output "core_resources" {
+    value = module.core.core_resources
+}

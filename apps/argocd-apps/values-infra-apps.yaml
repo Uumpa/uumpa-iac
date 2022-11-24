@@ -1,0 +1,12 @@
+infra_apps:
+
+  - name: cluster-admin
+    disableAutoSync: false
+    project: infra
+    destinationNamespace: cluster-admin
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/cluster-admin
+    sourceVaultPluginHelmValueFiles:
+      - values.yaml

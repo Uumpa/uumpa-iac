@@ -1,0 +1,4 @@
+{
+  "with_azuread": true,
+  "with_remote_states": ["core"]
+}

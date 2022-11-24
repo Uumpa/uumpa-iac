@@ -1,0 +1,10 @@
+module "dns" {
+  source = "__MODULES_PATH__/dns"
+  location = local.location
+  name_prefix = local.name_prefix
+  core_resources = data.terraform_remote_state.core.outputs.core_resources
+}
+
+output "dns" {
+    value = module.dns.dns
+}
