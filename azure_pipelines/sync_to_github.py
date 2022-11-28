@@ -50,6 +50,9 @@ def main():
         'git', 'clone', '--depth', '1', '--branch', 'main',
         'git@ssh.dev.azure.com:v3/uumpa/uumpa/uumpa-iac', AZURE_PATH
     ])
+    print("Clearing GitHub repo...")
+    for filename in iter_repo(GITHUB_PATH):
+        os.remove(os.path.join(GITHUB_PATH, filename))
     print("Copying files...")
     for filename in iter_repo(AZURE_PATH):
         os.makedirs(os.path.dirname(os.path.join(GITHUB_PATH, filename)), exist_ok=True)
