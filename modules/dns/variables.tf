@@ -1,24 +1,7 @@
-variable "name_prefix" {
+variable "core_json" {
   type = string
 }
 
-variable "location" {
-  type = string
-}
-
-variable "core_resources" {
-  type = object({
-    group = object({
-      id = string
-      name = string
-    })
-    key_vault = object({
-      id = string
-      name = string
-    })
-    subscription = object({
-      subscription_id = string
-      tenant_id = string
-    })
-  })
+locals {
+  core = jsondecode(var.core_json).core
 }

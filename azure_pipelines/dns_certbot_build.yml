@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - dns/*
+      - azure_pipelines/dns_certbot_build.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: "uumpa devops"
+
+steps:
+- task: AzureCLI@2
+  env:
+    REGISTRY: "$(container_registry_name)"
+    IMAGE: "$(container_registry_login_server)/dns-certbot:$(Build.SourceVersion)"
+    APPCONFIG: "$(appconfig_name)"
+  inputs:
+    azureSubscription: 'uumpa service connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az acr login --name $REGISTRY &&\
+      docker build -t $IMAGE dns &&\
+      docker push $IMAGE &&\
+      az appconfig kv set -y --name $APPCONFIG --key dns-certbot-latest-image --value $IMAGE

@@ -12,6 +12,7 @@ from kubernetes import client, config
 
 
 DEBUG = False
+APPCONFIG_ENDPOINT = os.environ.get("APPCONFIG_ENDPOINT")
 
 
 regex_pattern = re.compile('~([^~]+)~')
@@ -64,15 +65,15 @@ def parse_matches(matches):
         #                 'key': vault_key,
         #                 'output_raw': parse_type == 'vault_raw'
         #             }
-        if match.startswith('iac:'):
+        if match.startswith('iac:') or match.startswith('appconf:'):
             match_parts = match.split(':')
             if len(match_parts) > 1:
-                _, *iac_key = match.split(':')
-                iac_key = ':'.join(iac_key)
-                if len(iac_key):
+                _, *key = match.split(':')
+                key = ':'.join(key)
+                if len(key):
                     parsed_matches[match] = {
-                        'type': 'iac',
-                        'key': iac_key
+                        'type': 'iac' if match.startswith('iac:') else 'appconf',
+                        'key': key
                     }
     return parsed_matches
 
@@ -103,6 +104,17 @@ def get_iac_data():
 #     return vault_addr, vault_token
 
 
+def get_appconf_key(key):
+    return subprocess.check_output([
+        'az', 'appconfig', 'kv', 'show',
+        '--endpoint', APPCONFIG_ENDPOINT,
+        '--key', key,
+        '--auth-mode', 'login',
+        '--query', 'value',
+        '-o', 'tsv'
+    ]).decode().strip()
+
+
 def get_match_values(parsed_matches):
     # vault_addr, vault_token = get_vault_creds()
     match_values = {}
@@ -113,6 +125,8 @@ def get_match_values(parsed_matches):
             if iac_data is None:
                 iac_data = get_iac_data()
             match_values[match] = iac_data.get(parsed_match['key'], '')
+        elif parsed_match['type'] == 'appconf':
+            match_values[match] = get_appconf_key(parsed_match['key'])
         # elif parsed_match['type'] == 'vault':
         #     if parsed_match['path'] not in vault_paths_data:
         #         vault_paths_data[parsed_match['path']] = get_vault_path_data(vault_addr, vault_token, parsed_match['path'])

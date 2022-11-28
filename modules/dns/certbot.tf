@@ -1,5 +1,5 @@
 locals {
-  wildcard_pfx_secret_name = "${var.name_prefix}-wildcard-pfx"
+  wildcard_pfx_secret_name = "${local.core.environment_name}-wildcard-pfx"
 }
 
 resource "null_resource" "certbot" {
@@ -8,6 +8,14 @@ resource "null_resource" "certbot" {
     version = 1
   }
   provisioner "local-exec" {
-    command = "cd ${path.cwd} && python3 dns/certbot.py ${var.core_resources.key_vault.name} ${local.wildcard_pfx_secret_name} ${local.root_domain} ${local.letsencrypt_email} ${var.core_resources.group.name}"
+    command = <<EOF
+      cd ${path.cwd} &&\
+      python3 dns/certbot.py \
+        ${local.core.default_key_vault.name} \
+        ${local.wildcard_pfx_secret_name} \
+        ${local.root_domain} \
+        ${local.letsencrypt_email} \
+        ${local.core.default_resource_group.name}
+    EOF
   }
 }

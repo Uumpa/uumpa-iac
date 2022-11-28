@@ -13,8 +13,10 @@
 
 ## Login
 
-* Login to Azure with full access permissions: `az login --allow-no-subscriptions`
-* Create an Azure Devops personal access token with full access permissions to relevant project and set environment variables:
+Login to Azure with full access permissions: `az login --allow-no-subscriptions`
+
+To work with Azure DevOps, create a personal access token with full access permissions and set env vars:
+
 ```
 export AZDO_ORG_SERVICE_URL=https://dev.azure.com/....
 export AZDO_PERSONAL_ACCESS_TOKEN=
@@ -22,34 +24,34 @@ export AZDO_PERSONAL_ACCESS_TOKEN=
 
 ## Usage
 
-### Infrastructure / Terraform
+### Infrastructure
 
-Terraform is used to deploy infrastructure changes
+Environments are defined in `environments/` directory. Each environment has multiple sub-directories,
+each corresponding to a module under `modules/`.
 
-### Deploy Infrastructure Changes
-
-Deploy changes:
-
-```
-terraform -chdir=environments/ENVIRONMENT_NAME/MODULE_NAME init
-terraform -chdir=environments/ENVIRONMENT_NAME/MODULE_NAME apply
-```
-
-### Implement Infrastructure Changes
-
-Infrastructure changes should be implemented in the following files:
-
-* `modules/MODULE_NAME/*.tf` - Terraform shared module - used by multiple environments
-  * `modules/MODULE_NAME/module.config.json` - Configuration for the environments which use this module
-  * `modules/MODULE_NAME/module.tf.template` - Terraform configuration template for the environments which use this module
-* `environments/ENVIRONMENT_NAME/MODULE_NAME/*.tf` - Terraform environment module - used only by the specific environment
-* `environments/ENVIRONMENT_NAME/config.json` - Configuration for the environment
-
-If you make changes to the environment / module config or template, you should run the following
-command to update the environment terraform configuration accordingly:
+You can run Terraform commands for each environment/module combination using the following command:
 
 ```
-bin/update_terraform_environment_module.py ENVIRONMENT_NAME MODULE_NAME
+bin/terraform.py ENVIRONMENT_NAME MODULE_NAME ...
+```
+
+For example:
+
+```
+bin/terraform.py ENVIRONMENT_NAME MODULE_NAME init
+bin/terraform.py ENVIRONMENT_NAME MODULE_NAME plan
+```
+
+You can also run init and apply for all modules in an environment using the following command:
+
+```
+bin/terraform_init_apply.py ENVIRONMENT_NAME
+```
+
+See the help message for more options:
+
+```
+bin/terraform_init_apply.py --help
 ```
 
 ### Apps / ArgoCD

@@ -15,13 +15,16 @@ spec:
           restartPolicy: Never
           containers:
             - name: certbot
-              image: "~iac:dns_certbot_docker_image~"
+              image: {{ .Values.certbot_cronjob.image }}
               command:
               - bash
               - -c
               - |
                 az login --tenant $TENANT_ID --service-principal --password "${SP_PASSWORD}" --username $SP_USERNAME &&\
-                uumpa-certbot.py uumpa uumpa-wildcard-pfx "${UUMPA_ROOT_DOMAIN}" "${ADMIN_EMAIL}" --in-cluster
+                echo renewing $UUMPA_ROOT_DOMAIN &&\
+                uumpa-certbot.py $KEYVAULT_NAME "~iac:wildcard_pfx_secret_name~" "${UUMPA_ROOT_DOMAIN}" "${ADMIN_EMAIL}" --in-cluster &&\
+                echo renewing gam.al &&\
+                uumpa-certbot.py $KEYVAULT_NAME "~iac:gamal_wildcard_pfx_secret_name~" "gam.al" "${ADMIN_EMAIL}" --in-cluster
               env:
                 - name: SP_USERNAME
                   value: "~iac:certbot_service_principal_app_id~"
@@ -36,6 +39,8 @@ spec:
                   value: "~iac:uumpa_root_domain~"
                 - name: ADMIN_EMAIL
                   value: "~iac:admin_email~"
+                - name: KEYVAULT_NAME
+                  value: "~iac:keyvault_name~"
               volumeMounts:
                 - name: secrets-store-inline
                   mountPath: "/mnt/secrets-store"

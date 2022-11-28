@@ -14,3 +14,15 @@ projects:
           server: 'https://kubernetes.default.svc'
       sourceRepos:
         - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+
+  - name: gamal
+    spec:
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'
+      destinations:
+        - name: '*'
+          namespace: gamal
+          server: 'https://kubernetes.default.svc'
+      sourceRepos:
+        - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac

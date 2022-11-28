@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gamal
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - gam.al
+        - www.gam.al
+      secretName: gamal-cert
+  rules:
+    - host: "gam.al"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gamal
+                port:
+                  number: 80
+    - host: "www.gam.al"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gamal
+                port:
+                  number: 80

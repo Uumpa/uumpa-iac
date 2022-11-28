@@ -1,7 +1,7 @@
-variable "name_prefix" {
+variable "environment_name" {
   type = string
 }
 
-variable "location" {
+variable "default_location" {
   type = string
 }

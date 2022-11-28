@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gamal
+  labels:
+    app: gamal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gamal
+  template:
+    metadata:
+      labels:
+        app: gamal
+    spec:
+      serviceAccountName: gamal
+      containers:
+        - name: gamal
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: 80
+          resources:
+            {{ .Values.resources | toYaml | nindent 12 }}
+          volumeMounts:
+          - name: secrets-store-inline
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "gamal-cert"

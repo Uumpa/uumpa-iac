@@ -1,1 +1,12 @@
-apps: []
+apps:
+
+  - name: gamal
+    disableAutoSync: false
+    project: gamal
+    destinationNamespace: gamal
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/gamal
+    sourceVaultPluginHelmValueFiles:
+      - values.yaml

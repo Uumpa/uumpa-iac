@@ -1,0 +1,4 @@
+output "gamal" {
+  value = {
+  }
+}

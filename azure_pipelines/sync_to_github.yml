@@ -1,9 +1,19 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: "github azdo sync"
+
 steps:
-- script: |
-    azure_pipelines/sync_to_github.py
+- bash: |
+    mkdir ~/.ssh &&\
+    echo "$(github-azure-devops-sync-ssh-key-private)" > ~/.ssh/id_rsa &&\
+    chmod 400 ~/.ssh/id_rsa &&\
+    git config --global user.email "sync_to_github@uumpa-azure" &&\
+    git config --global user.name "sync_to_github" &&\
+    python3 azure_pipelines/sync_to_github.py

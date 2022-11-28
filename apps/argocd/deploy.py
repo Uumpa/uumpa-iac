@@ -149,6 +149,16 @@ def main(root_domain, azuread_group_default_kubernetes_admins, uumpa_iac_repo_re
             'password': uumpa_iac_repo_token,
         }
     }).encode())
+    subprocess.run(['kubectl', 'apply', '-n', 'argocd', '-f', '-'], check=True, input=json.dumps({
+        'apiVersion': 'v1',
+        'kind': 'Secret',
+        'metadata': {
+            'name': 'argocd-service-principal-password',
+        },
+        'stringData': {
+            'password': get_keyvault_secret(keyvault_name, 'uumpaprod-argocd-automation-sp-password'),
+        }
+    }).encode())
     with open('apps/argocd/argocd-repo-server-deploy.yaml.template') as rf:
         with open('apps/argocd/argocd-repo-server-deploy.yaml', 'w') as wf:
             wf.write(rf.read().replace('__PLUGIN_DOCKER_IMAGE__', plugin_docker_image))

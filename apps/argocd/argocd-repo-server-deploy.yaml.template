@@ -8,5 +8,36 @@ spec:
       containers:
       - name: argocd-repo-server
         image: __PLUGIN_DOCKER_IMAGE__
+        command:
+        - sh
+        - -c
+        - |
+          az login --service-principal -u $ARGOCD_SERVICE_PRINCIPAL_APP_ID \
+                   -p "${ARGOCD_SERVICE_PRINCIPAL_PASSWORD}" \
+                   --tenant $TENANT_ID &&\
+          entrypoint.sh argocd-repo-server --redis argocd-redis:6379
+        securityContext:
+          readOnlyRootFilesystem: false
+        env:
+        - name: ARGOCD_SERVICE_PRINCIPAL_APP_ID
+          valueFrom:
+            configMapKeyRef:
+              name: tf-outputs
+              key: argocd_service_principal_app_id
+        - name: TENANT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: tf-outputs
+              key: tenant_id
+        - name: APPCONFIG_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: tf-outputs
+              key: appconfig_endpoint
+        - name: ARGOCD_SERVICE_PRINCIPAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: argocd-service-principal-password
+              key: password
       automountServiceAccountToken: true
       serviceAccountName: argocd-server

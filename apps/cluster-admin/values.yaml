@@ -1,0 +1,2 @@
+certbot_cronjob:
+  image: "~appconf:dns-certbot-latest-image~"

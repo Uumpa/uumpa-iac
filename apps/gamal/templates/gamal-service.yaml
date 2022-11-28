@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gamal
+spec:
+  type: ClusterIP
+  selector:
+    app: gamal
+  ports:
+    - port: 80
+      targetPort: 80
