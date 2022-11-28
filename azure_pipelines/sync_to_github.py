@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import sys
 import shutil
 import subprocess
 from glob import glob
@@ -37,18 +38,20 @@ def git_commit(path, message):
         return True
 
 
-def main():
-    GITHUB_PATH = '.data/sync-uumpa-iac-github'
-    AZURE_PATH = '.data/sync-uumpa-iac-azure'
+def main(*args):
+    is_gamal = '--gamal' in args
+    repo_name = 'gamal' if is_gamal else 'uumpa-iac'
+    GITHUB_PATH = f'.data/sync-{repo_name}-github'
+    AZURE_PATH = f'.data/sync-{repo_name}-azure'
     shutil.rmtree(GITHUB_PATH, ignore_errors=True)
     shutil.rmtree(AZURE_PATH, ignore_errors=True)
     subprocess.check_call([
         'git', 'clone', '--depth', '1', '--branch', 'main',
-        'git@github.com:Uumpa/uumpa-iac.git', GITHUB_PATH
+        f'git@github.com:Uumpa/{repo_name}.git', GITHUB_PATH
     ])
     subprocess.check_call([
         'git', 'clone', '--depth', '1', '--branch', 'main',
-        'git@ssh.dev.azure.com:v3/uumpa/uumpa/uumpa-iac', AZURE_PATH
+        f'git@ssh.dev.azure.com:v3/uumpa/uumpa/{repo_name}', AZURE_PATH
     ])
     print("Clearing GitHub repo...")
     for filename in iter_repo(GITHUB_PATH):
@@ -60,11 +63,20 @@ def main():
     print("Committing to GitHub...")
     subprocess.check_call(['git', 'add', '-A'], cwd=GITHUB_PATH)
     if git_commit(GITHUB_PATH, 'Sync from Azure DevOps repository'):
-        subprocess.check_call(['git', 'push'], cwd=GITHUB_PATH)
+        subprocess.check_call(
+            ['git', 'push'],
+            cwd=GITHUB_PATH,
+            env={
+                **os.environ,
+                **({
+                    "GIT_SSH_COMMAND": 'ssh -i ~/.ssh/id_rsa_gamal -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+               } if is_gamal else {})
+            }
+        )
     else:
         print("Nothing to commit.")
     print("OK")
 
 
 if __name__ == "__main__":
-    main()
+    main(*sys.argv[1:])

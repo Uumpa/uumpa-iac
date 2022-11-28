@@ -10,5 +10,6 @@ output "uumpa_devops" {
     azdo_user_object_id = module.azuredevops_proj_repo_user.user_object_id
     azdo_user_name = local.azdo_user_name
     azdo_user_password_secret_name = local.azdo_user_password_secret_name
+    service_endpoint_id = local.service_endpoints[0].id
   }
 }

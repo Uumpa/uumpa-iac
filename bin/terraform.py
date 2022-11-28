@@ -4,6 +4,13 @@ import sys
 import subprocess
 
 
+HELP = '''
+Run terraform commands in the specified environment and path.
+
+Usage: bin/terraform.py [--help] <environment> <path> <command> [args] [--init] [--no-backend-config]
+'''.strip()
+
+
 def check_call(*args, **kwargs):
     try:
         subprocess.check_call(*args, **kwargs)
@@ -13,7 +20,16 @@ def check_call(*args, **kwargs):
 
 def main(environment_name, path, command, *args):
     no_backend_config = '--no-backend-config' in args
-    args = [arg for arg in args if arg != '--no-backend-config']
+    init = '--init' in args
+    help = '--help' in args
+    args = [arg for arg in args if arg not in ['--no-backend-config', '--init', '--help']]
+    if help:
+        print(HELP)
+        exit(1)
+    if init:
+        subprocess.check_call([
+            'python3', 'bin/terraform.py', environment_name, path, 'init'
+        ])
     path = os.path.join('environments', environment_name, path)
     default_resourcegroup_name = f'{environment_name}-default'
     secure_blobs_storage_account_name = f'{environment_name}secureblobs'

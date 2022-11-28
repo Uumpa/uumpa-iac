@@ -13,6 +13,7 @@ resource "null_resource" "generate" {
 }
 
 data "azurerm_key_vault_secret" "public_key" {
+  depends_on = [null_resource.generate]
   key_vault_id = var.key_vault_id
   name = "${var.secret_name}-public"
 }
