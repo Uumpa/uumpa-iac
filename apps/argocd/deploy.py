@@ -32,7 +32,6 @@ def main(root_domain, azuread_group_default_kubernetes_admins, uumpa_iac_repo_re
         },
         'data': {
             'url': f'https://argocd.{root_domain}',
-            'admin.enabled': 'false',
             'dex.config': dedent(f'''
                 logger:
                   level: debug
@@ -58,6 +57,7 @@ def main(root_domain, azuread_group_default_kubernetes_admins, uumpa_iac_repo_re
                     command: ["sh", "-c"]
                     args: ['argocd_iac_plugin.py generate . "$ARGOCD_APP_NAME" "$ARGOCD_APP_NAMESPACE" ${{ARGOCD_ENV_helm_args}}']
             ''').strip(),
+            'accounts.syncer': 'apiKey',
         }
     }).encode())
     subprocess.run(['kubectl', 'apply', '-n', 'argocd', '-f', '-'], check=True, input=json.dumps({
@@ -76,6 +76,8 @@ def main(root_domain, azuread_group_default_kubernetes_admins, uumpa_iac_repo_re
             # default kubernetes admins group has role:admin
             'policy.csv': dedent(f'''
                g, "{azuread_group_default_kubernetes_admins}", role:admin
+               p, syncer, applications, sync, */*, allow
+               p, syncer, applications, get, */*, allow
             ''').strip()
         }
     }).encode())

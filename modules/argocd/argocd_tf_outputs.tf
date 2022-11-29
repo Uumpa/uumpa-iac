@@ -6,6 +6,9 @@ resource "kubernetes_config_map" "tf_outputs" {
     name      = "tf-outputs"
     namespace = "argocd"
   }
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "kubernetes_config_map_v1_data" "tf_outputs" {
