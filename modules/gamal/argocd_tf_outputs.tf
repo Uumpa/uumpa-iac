@@ -5,13 +5,15 @@ module "kubernetes_context" {
   subscription_id = local.core.current_subscription.subscription_id
 }
 
-resource "kubernetes_config_map_v1_data" "tf_outputs" {
-  field_manager = "terraform_module_gamal"
-  metadata {
-    name      = "tf-outputs"
-    namespace = "argocd"
-  }
+module "tf_outputs" {
+  depends_on = [module.kubernetes_context]
+  source = "../common/argocd_tf_output_update"
+  application = "gamal"
   data = {
     gamal_wildcard_pfx_secret_name = local.wildcard_pfx_secret_name
   }
+  argocd_domain = "argocd.${local.dns.root_domain}"
+  field_manager = "terraform_module_gamal"
+  keyvault_name = local.core.default_key_vault.name
+  token_secret_name = "argocd-syncer-user-token"
 }
