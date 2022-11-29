@@ -35,7 +35,7 @@ steps:
       fi &&\
       docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" $CACHE_FROM dns &&\
       docker push "${IMAGE_NAME}:${IMAGE_TAG}" &&\
-      az appconfig kv set -y --name $APPCONFIG --key dns-certbot-latest-image --value $IMAGE &&\
+      az appconfig kv set -y --name $APPCONFIG --key dns-certbot-latest-image --value "${IMAGE_NAME}:${IMAGE_TAG}" &&\
       docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${IMAGE_NAME}:latest" &&\
       docker push "${IMAGE_NAME}:latest" &&\
       curl -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
