@@ -33,7 +33,7 @@ steps:
       if docker pull "${IMAGE_NAME}:latest"; then
         CACHE_FROM="--cache-from ${IMAGE_NAME}:latest"
       fi &&\
-      docker build --build-arg "VERSION=${IMAGE_TAG}" -t "${IMAGE_NAME}:${IMAGE_TAG}" $CACHE_FROM . &&\
+      docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" $CACHE_FROM dns &&\
       docker push "${IMAGE_NAME}:${IMAGE_TAG}" &&\
       az appconfig kv set -y --name $APPCONFIG --key dns-certbot-latest-image --value $IMAGE &&\
       docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${IMAGE_NAME}:latest" &&\
