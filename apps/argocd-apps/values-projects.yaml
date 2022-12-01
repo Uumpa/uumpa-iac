@@ -26,3 +26,15 @@ projects:
           server: 'https://kubernetes.default.svc'
       sourceRepos:
         - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+
+  - name: sonarqube
+    spec:
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'
+      destinations:
+        - name: '*'
+          namespace: sonarqube
+          server: 'https://kubernetes.default.svc'
+      sourceRepos:
+        - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac

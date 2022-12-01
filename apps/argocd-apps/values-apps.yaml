@@ -10,3 +10,14 @@ apps:
       path: apps/gamal
     sourceVaultPluginHelmValueFiles:
       - values.yaml
+
+  - name: sonarqube
+    disableAutoSync: true
+    project: sonarqube
+    destinationNamespace: sonarqube
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/sonarqube
+    sourceVaultPluginHelmValueFiles:
+      - values.yaml
