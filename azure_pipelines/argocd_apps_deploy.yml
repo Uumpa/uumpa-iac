@@ -25,6 +25,4 @@ steps:
     azureSubscription: 'uumpa service connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: |
-      curl -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
-        "https://${ARGOCD_DOMAIN}/api/v1/applications?refresh=hard"
+    inlineScript: python3 azure_pipelines/argocd_apps_deploy.py
