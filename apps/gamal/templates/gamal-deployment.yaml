@@ -4,6 +4,7 @@ metadata:
   name: gamal
   labels:
     app: gamal
+    foo: bar
 spec:
   replicas: 1
   selector:
