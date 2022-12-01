@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - apps/*
+    exclude:
+      - apps/argocd/*
+      - apps/ingress-nginx/*
+      - apps/secrets-store/*
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: "argocd sync"
+
+steps:
+- task: AzureCLI@2
+  env:
+    ARGOCD_TOKEN: "$(argocd-syncer-user-token)"
+    ARGOCD_DOMAIN: "$(argocd-domain)"
+  inputs:
+    azureSubscription: 'uumpa service connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      curl -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
+        "https://${ARGOCD_DOMAIN}/api/v1/applications?refresh=hard"
