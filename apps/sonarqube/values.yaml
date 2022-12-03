@@ -5,3 +5,13 @@ sonarqube:
     hosts:
       - name: "sonarqube.~iac:uumpa_root_domain~"
         path: /
+
+  persistence:
+    enabled: true
+    storageClass: managed-csi
+    size: 10Gi
+
+  postgresql:
+    persistence:
+      storageClass: managed-csi
+      size: 20Gi
