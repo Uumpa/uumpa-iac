@@ -5,7 +5,7 @@ trigger:
   paths:
     include:
       - apps/argocd/plugin/*
-      - azure_pipelines/atgocd_plugin_build.yml
+      - azure_pipelines/argocd_plugin_build.yml
 
 pool:
   vmImage: ubuntu-latest
@@ -17,14 +17,17 @@ steps:
 - task: AzureCLI@2
   env:
     REGISTRY: "$(container_registry_name)"
-    IMAGE: "$(container_registry_login_server)/argocd-plugin:$(Build.SourceVersion)"
+    IMAGE_NAME: "$(container_registry_login_server)/argocd-plugin"
+    IMAGE_TAG: "$(Build.SourceVersion)"
     APPCONFIG: "$(appconfig_name)"
   inputs:
     azureSubscription: 'uumpa service connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az acr login --name $REGISTRY &&\
-      docker build -t $IMAGE apps/argocd/plugin &&\
-      docker push $IMAGE &&\
-      az appconfig kv set -y --name $APPCONFIG --key argocd-plugin-latest-image --value $IMAGE
+      python3 azure_pipelines/build_push_deploy_latest.py \
+        --image-name "argocd-plugin" \
+        --image-tag "$(Build.SourceVersion)" \
+        --docker-path apps/argocd/plugin \
+        --appconfig-key argocd-plugin-latest-image \
+        --kubectl-patch-json '{"namespace": "argocd", "name": "argocd-repo-server", "container_name": "argocd-repo-server"}'

@@ -1,5 +1,0 @@
-{
-  "init_helm_repos": {
-    "sonarqube": "https://SonarSource.github.io/helm-chart-sonarqube"
-  }
-}

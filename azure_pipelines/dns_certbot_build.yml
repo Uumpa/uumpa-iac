@@ -17,26 +17,19 @@ variables:
 steps:
 - task: AzureCLI@2
   env:
-    REGISTRY: "$(container_registry_name)"
-    IMAGE_NAME: "$(container_registry_login_server)/dns-certbot"
-    IMAGE_TAG: "$(Build.SourceVersion)"
-    APPCONFIG: "$(appconfig_name)"
+    ACR_REGISTRY_NAME: "$(container_registry_name)"
+    ACR_REGISTRY_LOGIN_SERVER: "$(container_registry_login_server)"
+    APPCONFIG_NAME: "$(appconfig_name)"
     ARGOCD_TOKEN: "$(argocd-syncer-user-token)"
     ARGOCD_DOMAIN: "$(argocd-domain)"
-    ARGOCD_APPLICATION_NAME: cluster-admin
   inputs:
     azureSubscription: 'uumpa service connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az acr login --name $REGISTRY &&\
-      if docker pull "${IMAGE_NAME}:latest"; then
-        CACHE_FROM="--cache-from ${IMAGE_NAME}:latest"
-      fi &&\
-      docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" $CACHE_FROM dns &&\
-      docker push "${IMAGE_NAME}:${IMAGE_TAG}" &&\
-      az appconfig kv set -y --name $APPCONFIG --key dns-certbot-latest-image --value "${IMAGE_NAME}:${IMAGE_TAG}" &&\
-      docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${IMAGE_NAME}:latest" &&\
-      docker push "${IMAGE_NAME}:latest" &&\
-      curl -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
-        "https://${ARGOCD_DOMAIN}/api/v1/applications/${ARGOCD_APPLICATION_NAME}?refresh=hard"
+      python3 azure_pipelines/build_push_deploy_latest.py \
+        --image-name "dns-certbot" \
+        --image-tag "$(Build.SourceVersion)" \
+        --docker-path dns \
+        --appconfig-key dns-certbot-latest-image \
+        --argocd-application-name cluster-admin
