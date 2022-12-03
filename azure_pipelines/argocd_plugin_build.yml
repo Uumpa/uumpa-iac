@@ -20,6 +20,8 @@ steps:
     IMAGE_NAME: "$(container_registry_login_server)/argocd-plugin"
     IMAGE_TAG: "$(Build.SourceVersion)"
     APPCONFIG: "$(appconfig_name)"
+    AKS_RESOURCE_GROUP_NAME: "$(resource_group_name)"
+    AKS_CLUSTER_NAME: "$(aks_cluster_name)"
   inputs:
     azureSubscription: 'uumpa service connection'
     scriptType: 'bash'

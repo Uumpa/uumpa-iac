@@ -13,4 +13,12 @@ resource "azuredevops_variable_group" "default" {
     name = "appconfig_name"
     value = azurerm_app_configuration.default.name
   }
+  variable {
+    name = "resource_group_name"
+    value = local.core.default_resource_group.name
+  }
+  variable {
+    name = "aks_cluster_name"
+    value = local.kubernetes.cluster_name
+  }
 }

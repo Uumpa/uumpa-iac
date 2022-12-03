@@ -10,6 +10,8 @@ ACR_REGISTRY_LOGIN_SERVER = os.environ.get("ACR_REGISTRY_LOGIN_SERVER")
 APPCONFIG_NAME = os.environ.get('APPCONFIG_NAME')
 ARGOCD_TOKEN = os.environ.get("ARGOCD_TOKEN")
 ARGOCD_DOMAIN = os.environ.get("ARGOCD_DOMAIN")
+AKS_RESOURCE_GROUP_NAME = os.environ.get("AKS_RESOURCE_GROUP_NAME")
+AKS_CLUSTER_NAME = os.environ.get("AKS_CLUSTER_NAME")
 
 
 def get_argument_parser():
@@ -46,6 +48,13 @@ def main(image_name, image_tag, docker_path, appconfig_key, argocd_application_n
             f'https://{ARGOCD_DOMAIN}/api/v1/applications/{argocd_application_name}?refresh=hard'
         ])
     if kubectl_patch:
+        subprocess.check_call([
+            'az', 'aks', 'get-credentials', '--resource-group', AKS_RESOURCE_GROUP_NAME,
+            '--name', AKS_CLUSTER_NAME, '--overwrite-existing'
+        ])
+        subprocess.check_call([
+            'kubelogin', 'convert-kubeconfig', '-l', AKS_CLUSTER_NAME
+        ])
         subprocess.check_call([
             'kubectl', 'patch', '-n', kubectl_patch['namespace'],
             kubectl_patch.get('kind', 'deployment'), kubectl_patch['name'],
