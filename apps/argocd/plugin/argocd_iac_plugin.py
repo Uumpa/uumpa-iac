@@ -45,9 +45,9 @@ def init(chart_path):
     if os.path.exists(config_json_filename):
         with open(config_json_filename) as f:
             conf = json.load(f)
-    for repo_name, repo_url in conf.get('init_helm_repos', {}).items():
-        subprocess.check_call(['helm', 'repo', 'add', repo_name, repo_url])
-    subprocess.check_call(['helm', 'dependency', 'build'], cwd=chart_path)
+    # for repo_name, repo_url in conf.get('init_helm_repos', {}).items():
+    #     subprocess.check_call(['helm', 'repo', 'add', repo_name, repo_url])
+    # subprocess.check_call(['helm', 'dependency', 'build'], cwd=chart_path)
 
 
 def parse_matches(matches):
