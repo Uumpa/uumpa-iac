@@ -38,16 +38,17 @@ def debug_log(msg, with_env=False):
             debug_log(subprocess.check_output(['env']).decode())
 
 
-def init(chart_path):
-    debug_log(f'init chart_path={chart_path}')
-    config_json_filename = os.path.join(chart_path, 'argocd_iac_plugin.json')
-    conf = {}
-    if os.path.exists(config_json_filename):
-        with open(config_json_filename) as f:
-            conf = json.load(f)
-    # for repo_name, repo_url in conf.get('init_helm_repos', {}).items():
-    #     subprocess.check_call(['helm', 'repo', 'add', repo_name, repo_url])
-    # subprocess.check_call(['helm', 'dependency', 'build'], cwd=chart_path)
+# we rely on users to build the dependencies and commit it to the repo, so this is not needed
+# def init(chart_path):
+#     debug_log(f'init chart_path={chart_path}')
+#     config_json_filename = os.path.join(chart_path, 'argocd_iac_plugin.json')
+#     conf = {}
+#     if os.path.exists(config_json_filename):
+#         with open(config_json_filename) as f:
+#             conf = json.load(f)
+#     for repo_name, repo_url in conf.get('init_helm_repos', {}).items():
+#         subprocess.check_call(['helm', 'repo', 'add', repo_name, repo_url])
+#     subprocess.check_call(['helm', 'dependency', 'build'], cwd=chart_path)
 
 
 def parse_matches(matches):
@@ -156,7 +157,8 @@ def generate(chart_path, argocd_app_name, argocd_app_namespace, *helm_args):
 
 def main(operation, *args):
     if operation == 'init':
-        init(*args)
+        pass
+        # init(*args)
     elif operation == 'generate':
         generate(*args)
 

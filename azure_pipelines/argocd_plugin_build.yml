@@ -16,10 +16,9 @@ variables:
 steps:
 - task: AzureCLI@2
   env:
-    REGISTRY: "$(container_registry_name)"
-    IMAGE_NAME: "$(container_registry_login_server)/argocd-plugin"
-    IMAGE_TAG: "$(Build.SourceVersion)"
-    APPCONFIG: "$(appconfig_name)"
+    ACR_REGISTRY_NAME: "$(container_registry_name)"
+    ACR_REGISTRY_LOGIN_SERVER: "$(container_registry_login_server)"
+    APPCONFIG_NAME: "$(appconfig_name)"
     AKS_RESOURCE_GROUP_NAME: "$(resource_group_name)"
     AKS_CLUSTER_NAME: "$(aks_cluster_name)"
   inputs:
@@ -27,6 +26,8 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
+      curl -sLo kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.0.24/kubelogin-linux-amd64.zip &&\
+      sudo unzip -j kubelogin.zip -d /usr/local/bin &&\
       python3 azure_pipelines/build_push_deploy_latest.py \
         --image-name "argocd-plugin" \
         --image-tag "$(Build.SourceVersion)" \

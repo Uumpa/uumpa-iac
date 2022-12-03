@@ -1,0 +1,7 @@
+sonarqube:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - name: "sonarqube.~iac:uumpa_root_domain~"
+        path: /

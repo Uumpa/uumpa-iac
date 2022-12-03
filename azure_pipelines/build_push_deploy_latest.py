@@ -22,26 +22,28 @@ def get_argument_parser():
     parser.add_argument('--appconfig-key', required=True)
     parser.add_argument('--argocd-application-name')
     parser.add_argument('--kubectl-patch-json')
+    parser.add_argument('--skip-build', action='store_true')
     return parser
 
 
-def main(image_name, image_tag, docker_path, appconfig_key, argocd_application_name=None, kubectl_patch_json=None):
+def main(image_name, image_tag, docker_path, appconfig_key, argocd_application_name=None, kubectl_patch_json=None, skip_build=False):
     image_name = f'{ACR_REGISTRY_LOGIN_SERVER}/{image_name}'
     kubectl_patch = json.loads(kubectl_patch_json) if kubectl_patch_json else None
-    subprocess.check_call(['az', 'acr', 'login', '--name', ACR_REGISTRY_NAME])
-    cache_from_args = []
-    if subprocess.call(['docker', 'pull', f'{image_name}:latest']) == 0:
-      cache_from_args = ['--cache-from', f'{image_name}:latest']
-    subprocess.check_call([
-      'docker', 'build', *cache_from_args, '-t', f'{image_name}:{image_tag}', '-t', f'{image_name}:latest', docker_path
-    ])
-    for image in [f'{image_name}:{image_tag}', f'{image_name}:latest']:
-      subprocess.check_call(['docker', 'push', image])
-    subprocess.check_call([
-      'az', 'appconfig', 'kv', 'set', '-y',
-      '--name', APPCONFIG_NAME,
-      '--key', appconfig_key, '--value', f'{image_name}:{image_tag}'
-    ])
+    if not skip_build:
+        subprocess.check_call(['az', 'acr', 'login', '--name', ACR_REGISTRY_NAME])
+        cache_from_args = []
+        if subprocess.call(['docker', 'pull', f'{image_name}:latest']) == 0:
+          cache_from_args = ['--cache-from', f'{image_name}:latest']
+        subprocess.check_call([
+          'docker', 'build', *cache_from_args, '-t', f'{image_name}:{image_tag}', '-t', f'{image_name}:latest', docker_path
+        ])
+        for image in [f'{image_name}:{image_tag}', f'{image_name}:latest']:
+          subprocess.check_call(['docker', 'push', image])
+        subprocess.check_call([
+          'az', 'appconfig', 'kv', 'set', '-y',
+          '--name', APPCONFIG_NAME,
+          '--key', appconfig_key, '--value', f'{image_name}:{image_tag}'
+        ])
     if argocd_application_name:
         subprocess.check_call([
             'curl', '-H', f'Authorization: Bearer {ARGOCD_TOKEN}',
@@ -53,7 +55,7 @@ def main(image_name, image_tag, docker_path, appconfig_key, argocd_application_n
             '--name', AKS_CLUSTER_NAME, '--overwrite-existing'
         ])
         subprocess.check_call([
-            'kubelogin', 'convert-kubeconfig', '-l', AKS_CLUSTER_NAME
+            'kubelogin', 'convert-kubeconfig', '-l', 'azurecli'
         ])
         subprocess.check_call([
             'kubectl', 'patch', '-n', kubectl_patch['namespace'],

@@ -11,5 +11,6 @@ output "uumpa_devops" {
     azdo_user_name = local.azdo_user_name
     azdo_user_password_secret_name = local.azdo_user_password_secret_name
     service_endpoint_id = local.service_endpoints[0].id
+    service_endpoint_spn_object_id = local.service_endpoints[0].data.spnObjectId
   }
 }
