@@ -1,0 +1,24 @@
+trigger:
+  branches:
+    include:
+      # analyzing multiple branches requires a paid SonarQube subscription
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: "sonarqube"
+
+steps:
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'SonarQube'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: '$(sq-project-key-uumpa-iac)'
+    cliSources: '.'
+- task: SonarQubeAnalyze@5
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'

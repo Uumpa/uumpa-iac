@@ -8,5 +8,6 @@ output "sonarqube" {
       "SAML user name attribute": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
       "Identity provider certificate": "Get from Azure AD enterprise application SonarQube -> Single sign-on -> SAML Certificate (Base64)",
     }
+    "azuredevops_token" = "bin/get_secret.py uumpaprod sonarqube-azdo-token"
   }
 }

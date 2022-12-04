@@ -40,3 +40,8 @@ variable "key_vault_name" {
 variable "user_password_secret_name" {
   type = string
 }
+
+variable "azuredevops_token_secret_name" {
+  type = string
+  default = ""
+}
