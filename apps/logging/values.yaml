@@ -1,0 +1,14 @@
+loki:
+
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+    type: azure
+    azure:
+      accountName: "~iac:logs_storage_account_name~"
+      accountKey: "~iac:logs_storage_account_key~"
+#      useManagedIdentity: false
+#      userAssignedId: null
+#      requestTimeout: null

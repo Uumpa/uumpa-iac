@@ -44,3 +44,14 @@ infra_apps:
         name: monitoring-kube-prometheus-admission
         jsonPointers:
           - /webhooks/0/failurePolicy
+
+  - name: logging
+    disableAutoSync: true
+    project: infra
+    destinationNamespace: logging
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/logging
+    sourceVaultPluginHelmValueFiles:
+    - values.yaml
