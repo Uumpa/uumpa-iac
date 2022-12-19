@@ -19,7 +19,8 @@ loki:
       enabled: false
     lokiCanary:
       enabled: false
-
+  test:
+    enabled: false
 
   storage:
     bucketNames:
