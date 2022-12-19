@@ -45,6 +45,18 @@ infra_apps:
         jsonPointers:
           - /webhooks/0/failurePolicy
 
+  - name: logging-grafana-agent-operator-crds
+    disableAutoSync: true
+    project: infra
+    destinationNamespace: logging
+    source:
+      repoURL: https://github.com/grafana/helm-charts.git
+      path: charts/agent-operator/crds/
+      # this version should match version of grafana-agent-operator installed from logging chart
+      targetRevision: grafana-agent-operator-0.2.3
+      directory:
+        recurse: true
+
   - name: logging
     disableAutoSync: true
     project: infra
