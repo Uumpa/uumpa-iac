@@ -67,3 +67,9 @@ infra_apps:
       path: apps/logging
     sourceVaultPluginHelmValueFiles:
     - values.yaml
+    ignoreDifferences:
+      - group: apps
+        kind: StatefulSet
+        name: loki-read
+        jsonPointers:
+          - /spec/persistentVolumeClaimRetentionPolicy
