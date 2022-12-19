@@ -2,6 +2,9 @@ loki:
   monitoring:
     dashboards:
       namespace: monitoring
+      labels:
+        grafana_dashboard: "1"
+        release: monitoring
 
   storage:
     bucketNames:
