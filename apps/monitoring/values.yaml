@@ -1,6 +1,11 @@
 kube-prometheus-stack:
 
   grafana:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      hosts:
+        - "grafana.~iac:uumpa_root_domain~"
     persistence:
       enabled: true
 
