@@ -1,4 +1,7 @@
 loki:
+  monitoring:
+    dashboards:
+      namespace: monitoring
 
   storage:
     bucketNames:
