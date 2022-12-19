@@ -1,0 +1,16 @@
+kube-prometheus-stack:
+
+  grafana:
+    persistence:
+      enabled: true
+
+  prometheus:
+    prometheusSpec:
+      retention: 5d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+              requests:
+                storage: 100Gi

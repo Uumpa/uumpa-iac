@@ -12,6 +12,12 @@ projects:
         - name: '*'
           namespace: ingress-nginx
           server: 'https://kubernetes.default.svc'
+        - name: '*'
+          namespace: monitoring
+          server: 'https://kubernetes.default.svc'
+        - name: '*'
+          namespace: kube-system
+          server: 'https://kubernetes.default.svc'
       sourceRepos:
         - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
 

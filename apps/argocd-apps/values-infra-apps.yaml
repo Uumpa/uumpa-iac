@@ -10,3 +10,37 @@ infra_apps:
       path: apps/cluster-admin
     sourceVaultPluginHelmValueFiles:
       - values.yaml
+
+  - name: monitoring-kube-prometheus-crds
+    disableAutoSync: true
+    project: infra
+    destinationNamespace: monitoring
+    source:
+      repoURL: https://github.com/prometheus-community/helm-charts.git
+      path: charts/kube-prometheus-stack/crds/
+      # this version should match version defined in apps/monitoring/Chart.yaml
+      targetRevision: kube-prometheus-stack-39.11.0
+      directory:
+        recurse: true
+
+  - name: monitoring
+    disableAutoSync: true
+    project: infra
+    destinationNamespace: monitoring
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/monitoring
+    sourceVaultPluginHelmValueFiles:
+    - values.yaml
+    ignoreDifferences:
+      - group: admissionregistration.k8s.io
+        kind: MutatingWebhookConfiguration
+        name: monitoring-kube-prometheus-admission
+        jsonPointers:
+          - /webhooks/0/failurePolicy
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        name: monitoring-kube-prometheus-admission
+        jsonPointers:
+          - /webhooks/0/failurePolicy
