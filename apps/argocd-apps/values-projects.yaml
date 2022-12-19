@@ -20,6 +20,7 @@ projects:
           server: 'https://kubernetes.default.svc'
       sourceRepos:
         - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+        - https://github.com/prometheus-community/helm-charts.git
 
   - name: gamal
     spec:
