@@ -5,6 +5,21 @@ loki:
       labels:
         grafana_dashboard: "1"
         release: monitoring
+    rules:
+      namespace: monitoring
+      labels:
+        release: monitoring
+    serviceMonitor:
+      namespace: monitoring
+      labels:
+          release: monitoring
+      metricsInstance:
+        enabled: false
+    selfMonitoring:
+      enabled: false
+    lokiCanary:
+      enabled: false
+
 
   storage:
     bucketNames:
