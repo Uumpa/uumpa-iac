@@ -15,7 +15,7 @@ DEBUG = False
 APPCONFIG_ENDPOINT = os.environ.get("APPCONFIG_ENDPOINT")
 
 
-regex_pattern = re.compile('~([^~]+)~')
+regex_pattern = re.compile('~([^~\s]{1,100})~')
 regex_format = '~{}~'
 
 
