@@ -1,6 +1,10 @@
 loki:
   loki:
     auth_enabled: false
+  write:
+    replicas: 1
+  read:
+    replicas: 1
   monitoring:
     dashboards:
       namespace: monitoring
