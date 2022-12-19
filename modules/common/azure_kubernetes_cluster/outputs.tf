@@ -21,3 +21,7 @@ output "ingress_ip" {
 output "ingress_ip_id" {
   value = local.matching_ingress_ip_id
 }
+
+output "kubernetes_cluster_id" {
+  value = azurerm_kubernetes_cluster.cluster.id
+}

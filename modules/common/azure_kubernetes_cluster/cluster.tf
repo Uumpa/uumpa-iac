@@ -12,9 +12,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     # 2vCPU, 8GB RAM, 0GB temporary storage, $0.115/hour ($83.95/month)
     vm_size             = "Standard_D2s_v4"
     node_count          = 1
-    enable_auto_scaling = true
-    min_count           = 1
-    max_count           = 2
+    enable_auto_scaling = false
     os_disk_type        = "Managed"
     os_disk_size_gb     = 200
     os_sku              = "Ubuntu"
