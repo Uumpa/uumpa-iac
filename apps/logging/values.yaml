@@ -1,4 +1,6 @@
 loki:
+  loki:
+    auth_enabled: false
   monitoring:
     dashboards:
       namespace: monitoring
