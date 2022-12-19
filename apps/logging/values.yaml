@@ -13,6 +13,9 @@ loki:
       namespace: monitoring
       labels:
           release: monitoring
+      namespaceSelector:
+        matchNames:
+          - logging
       metricsInstance:
         enabled: false
     selfMonitoring:
