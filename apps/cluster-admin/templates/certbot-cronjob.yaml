@@ -22,9 +22,9 @@ spec:
               - |
                 az login --tenant $TENANT_ID --service-principal --password "${SP_PASSWORD}" --username $SP_USERNAME &&\
                 echo renewing $UUMPA_ROOT_DOMAIN &&\
-                uumpa-certbot.py $KEYVAULT_NAME "~iac:wildcard_pfx_secret_name~" "${UUMPA_ROOT_DOMAIN}" "${ADMIN_EMAIL}" --in-cluster &&\
+                uumpa-certbot.py $KEYVAULT_NAME "~iac:wildcard_pfx_secret_name~" "${UUMPA_ROOT_DOMAIN}" "${ADMIN_EMAIL}" uumpaprod-default --in-cluster &&\
                 echo renewing gam.al &&\
-                uumpa-certbot.py $KEYVAULT_NAME "~iac:gamal_wildcard_pfx_secret_name~" "gam.al" "${ADMIN_EMAIL}" --in-cluster
+                uumpa-certbot.py $KEYVAULT_NAME "~iac:gamal_wildcard_pfx_secret_name~" "gam.al" "${ADMIN_EMAIL}" uumpaprod-default --in-cluster
               env:
                 - name: SP_USERNAME
                   value: "~iac:certbot_service_principal_app_id~"
