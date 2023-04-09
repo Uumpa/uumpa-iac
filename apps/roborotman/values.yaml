@@ -1,3 +1,6 @@
+ingress:
+  host: "roborotman.~iac:uumpa_root_domain~"
+
 web:
   image: ghcr.io/orihoch/chatgptgames/rotman:530028830346b13534558ef8d993edd55d966469
   resources:
