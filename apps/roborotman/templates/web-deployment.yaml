@@ -20,4 +20,4 @@ spec:
         resources: {{ toYaml .Values.web.resources | nindent 10 }}
         envFrom:
         - secretRef:
-          name: app
+            name: app
