@@ -2,7 +2,7 @@ ingress:
   host: "roborotman.~iac:uumpa_root_domain~"
 
 web:
-  image: ghcr.io/orihoch/chatgptgames/rotman:530028830346b13534558ef8d993edd55d966469
+  image: ghcr.io/orihoch/chatgptgames/rotman:80961fbd538bcf748bdafdad0dbe3a270487b892
   resources:
     requests:
       cpu: 50m
@@ -12,7 +12,7 @@ web:
       memory: 200Mi
 
 nginx:
-  image: ghcr.io/orihoch/chatgptgames/rotman-nginx:530028830346b13534558ef8d993edd55d966469
+  image: ghcr.io/orihoch/chatgptgames/rotman-nginx:80961fbd538bcf748bdafdad0dbe3a270487b892
   resources:
     requests:
       cpu: 25m
