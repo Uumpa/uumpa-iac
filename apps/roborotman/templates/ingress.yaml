@@ -8,11 +8,17 @@ spec:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-        - path: /static
-          backend:
-            serviceName: nginx
-            servicePort: 80
-        - path: /
-          backend:
-            serviceName: web
-            servicePort: 80
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 80
