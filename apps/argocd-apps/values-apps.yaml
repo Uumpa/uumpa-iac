@@ -21,3 +21,14 @@ apps:
       path: apps/sonarqube
     sourceVaultPluginHelmValueFiles:
       - values.yaml
+
+  - name: roborotman
+    disableAutoSync: true
+    project: roborotman
+    destinationNamespace: roborotman
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/roborotman
+    sourceVaultPluginHelmValueFiles:
+      - values.yaml

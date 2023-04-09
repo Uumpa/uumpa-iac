@@ -1,0 +1,19 @@
+web:
+  image: ghcr.io/orihoch/chatgptgames/rotman:530028830346b13534558ef8d993edd55d966469
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 200Mi
+
+nginx:
+  image: ghcr.io/orihoch/chatgptgames/rotman-nginx:530028830346b13534558ef8d993edd55d966469
+  resources:
+    requests:
+      cpu: 25m
+      memory: 50Mi
+    limits:
+      cpu: 50m
+      memory: 100Mi
