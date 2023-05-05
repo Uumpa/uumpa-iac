@@ -61,3 +61,15 @@ projects:
           server: 'https://kubernetes.default.svc'
       sourceRepos:
         - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+
+  - name: ckangpt
+    spec:
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'
+      destinations:
+        - name: '*'
+          namespace: ckangpt
+          server: 'https://kubernetes.default.svc'
+      sourceRepos:
+        - https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac

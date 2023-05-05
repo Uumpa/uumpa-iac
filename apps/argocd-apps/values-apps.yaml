@@ -32,3 +32,14 @@ apps:
       path: apps/roborotman
     sourceVaultPluginHelmValueFiles:
       - values.yaml
+
+  - name: ckangpt
+    disableAutoSync: true
+    project: ckangpt
+    destinationNamespace: ckangpt
+    source:
+      repoURL: https://uumpa@dev.azure.com/uumpa/uumpa/_git/uumpa-iac
+      targetRevision: main
+      path: apps/ckangpt
+    sourceVaultPluginHelmValueFiles:
+      - values.yaml
