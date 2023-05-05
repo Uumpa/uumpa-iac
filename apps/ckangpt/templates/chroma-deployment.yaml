@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chroma
+spec:
+  selector:
+    matchLabels:
+      app: chroma
+  replicas: 1
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: chroma
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: chroma
+        image: {{ .Values.chroma.image | quote }}
+        command: ["uvicorn", "chromadb.app:app", "--host", "0.0.0.0", "--port", "8000", "--log-config", "log_config.yml"]
+        resources: {{ toYaml .Values.chroma.resources | nindent 10 }}
+        env:
+        - name: CHROMA_DB_IMPL
+          value: clickhouse
+        - name: CLICKHOUSE_HOST
+          value: clickhouse
+        - name: CLICKHOUSE_PORT
+          value: "8123"
+        volumeMounts:
+        - name: index-data
+          mountPath: /index_data
+      volumes:
+      - name: index-data
+        persistentVolumeClaim:
+          claimName: chroma-index-data

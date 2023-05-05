@@ -21,6 +21,8 @@ spec:
         image: {{ .Values.clickhouse.image | quote }}
         resources: {{ toYaml .Values.clickhouse.resources | nindent 10 }}
         env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
         - name: CLICKHOUSE_TCP_PORT
           value: "9000"
         - name: CLICKHOUSE_HTTP_PORT
@@ -28,13 +30,13 @@ spec:
         volumeMounts:
         - name: clickhouse-data
           mountPath: /bitnami/clickhouse
-        - name: chroma-users
+        - name: clickhouse-chroma-users
           mountPath: /etc/clickhouse-server/users.d/chroma.xml
           subPath: chroma.xml
       volumes:
       - name: clickhouse-data
         persistentVolumeClaim:
           claimName: clickhouse-data
-      - name: chroma-users
-        secret:
-          secretName: chroma-users
+      - name: clickhouse-chroma-users
+        configMap:
+          name: clickhouse-chroma-users
