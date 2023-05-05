@@ -23,7 +23,7 @@ spec:
           - bash
           - -c
           - |
-            pip install gunicorn==10.1.0 &&\
+            pip install gunicorn==20.1.0 &&\
             echo '# copied from https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/gunicorn_conf.py August 24, 2021
             import json
             import multiprocessing
