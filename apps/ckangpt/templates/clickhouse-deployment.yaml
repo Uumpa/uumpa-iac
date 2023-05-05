@@ -31,10 +31,10 @@ spec:
         - name: chroma-users
           mountPath: /etc/clickhouse-server/users.d/chroma.xml
           subPath: chroma.xml
-    volumes:
-    - name: clickhouse-data
-      persistentVolumeClaim:
-        claimName: clickhouse-data
-    - name: chroma-users
-      secret:
-        secretName: chroma-users
+      volumes:
+      - name: clickhouse-data
+        persistentVolumeClaim:
+          claimName: clickhouse-data
+      - name: chroma-users
+        secret:
+          secretName: chroma-users
