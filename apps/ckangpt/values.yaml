@@ -13,7 +13,7 @@ chroma:
   image: ghcr.io/chroma-core/chroma:0.3.22.dev56@sha256:c691d8388e5a535c8309a517c3ecbc9b345b7c0f7934fe2528458947f0d2e7a2
   resources:
     requests:
-      cpu: 25m
-      memory: 100Mi
+      cpu: 200m
+      memory: 500Mi
     limits:
-      memory: 200Mi
+      memory: 1000Mi
