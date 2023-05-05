@@ -93,6 +93,7 @@ spec:
             }
             print(json.dumps(log_data))
             ' > gunicorn_conf.py &&\
+            python3 -c "from chromadb import Client; Client().list_collections()" &&\
             exec gunicorn -k uvicorn.workers.UvicornWorker -c gunicorn_conf.py chromadb.app:app
         resources: {{ toYaml .Values.chroma.resources | nindent 10 }}
         env:
